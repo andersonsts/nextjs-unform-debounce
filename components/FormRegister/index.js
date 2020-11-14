@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import * as _ from 'lodash.debounce';
 import * as Yup from 'yup';
@@ -9,7 +9,6 @@ import {
   ButtonSubmit,
   Container,
   FormItemContainer,
-  Loading,
   Title
 } from '../../styles/components/FormRegister/styles';
 
@@ -35,9 +34,15 @@ export default function FormRegister({ handleValueData, initialData }) {
         abortEarly: false,
       });
 
+      // if(data.name === 'anderson') {
+      //   formRef.current.setErrors({
+      //     name: 'O nome Anderson não pode...'
+      //   })
+      //   return;
+      // }
+
       handleValueData(data)
     } catch (err) {
-      console.log(err);
       const validationErrors = {};
   
       if (err instanceof Yup.ValidationError) {
@@ -53,60 +58,63 @@ export default function FormRegister({ handleValueData, initialData }) {
   }, [])
 
   const handleEvent = useCallback(_(event => {
-    setUserInfo(prevState => ({ ...prevState, [event.target.name]: event.target.value }))
+    setUserInfo(prevState => ({ 
+      ...prevState, 
+      [event.target.name]: event.target.value 
+    }))
   }, 500), [])
-  
-  // useEffect(() => console.log('inital', initialData), [initialData])
-
-  useEffect(() => {
-    if(initialData) {
-      formRef.current.setData({ 
-        techs: initialData.techs,
-        name: initialData.name,
-        email: initialData.email 
-      })
-    }
-  }, [])
 
   return (
     <Container>
       <Title>UNFORM</Title>
 
-      <Form onSubmit={handleSubmit} ref={formRef}>
-        <FormItemContainer>
-          <label>Nome</label>
-          <Input 
-            placeholder="Name" 
-            name="name" 
-            onChange={event => handleEvent(event)} 
-          />
-        </FormItemContainer>
+      {initialData.techs 
+      ? <> <Form onSubmit={handleSubmit} ref={formRef} initialData={initialData}>
+            <FormItemContainer>
+              <label>Nome</label>
+              <Input 
+                placeholder="Name" 
+                name="name" 
+                onChange={event => handleEvent(event)} 
+              />
+            </FormItemContainer>
 
-        <FormItemContainer>
-          <label>Email</label>
-          <Input 
-            placeholder="Email" 
-            name="email" 
-            type="email" 
-            onChange={event => handleEvent(event)}
-          />
-        </FormItemContainer>
+            <FormItemContainer>
+              <label>Email</label>
+              <Input 
+                placeholder="Email" 
+                name="email" 
+                type="email" 
+                onChange={event => handleEvent(event)}
+              />
+            </FormItemContainer>
 
-        {initialData.techs && 
-        <FormItemContainer>
-          <label>Techs</label>
-          <Select 
-            name="techs"
-            options={options} 
-            onChange={optionselected => setUserInfo(prevState => 
-              ({ ...prevState, techs: optionselected.value }))
-            }
-          />
-        </FormItemContainer>
-        } 
+            <FormItemContainer>
+              <label>Techs</label>
+              <Select 
+                name="techs"
+                options={options}
+              />
+            </FormItemContainer>
 
-        <ButtonSubmit type="submit">REGISTER</ButtonSubmit>
-      </Form>
+            <ButtonSubmit type="submit">REGISTER</ButtonSubmit>
+           </Form>
+
+          <button 
+            type="button" 
+            onClick={() => formRef.current.setErrors({ name: 'Erro manual no name' })}
+          >
+            CLIQUE PARA SETAR UM ERRO MANUAL 
+          </button>
+
+          <button 
+            type="button" 
+            onClick={() => formRef.current.setErrors({ })}
+          >
+            CLIQUE PARA LIMPAR OS ERROS MANUALMENTE 
+          </button>
+        </>
+      : <h1>Carregando o unform...</h1>}  
     </Container>
   )
 }

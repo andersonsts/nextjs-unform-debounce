@@ -6,8 +6,6 @@ const Select = ({ name, options, ...rest }) => {
   const selectRef = useRef(null);
   const { fieldName, defaultValue, registerField, error } = useField(name);
 
-  console.log('valued', defaultValue);
-
   useEffect(() => {
     registerField({
       name: fieldName,
@@ -25,7 +23,13 @@ const Select = ({ name, options, ...rest }) => {
           }
           return ref.state.value.value;
         }
-      }
+      },
+      setValue: (ref, value) => {
+        ref.select.setValue(
+          options.find(option => option.value === value),
+          'select-option'
+        );
+      },
     });
   }, [fieldName, registerField, rest.isMulti]);
 

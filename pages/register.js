@@ -27,7 +27,9 @@ export default function Register() {
 
   return (
     <>
-      {dataUser ? <FormRegister handleValueData={handleValueData} initialData={dataUser} /> : <Loading />}
+      {dataUser 
+      ? <FormRegister handleValueData={handleValueData} initialData={dataUser} /> 
+      : <Loading />}
     </>
   )
 }
