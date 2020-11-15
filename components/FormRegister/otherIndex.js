@@ -40,6 +40,13 @@ export default function FormRegister({ handleValueData, initialData, validateAga
         abortEarly: false,
       });
 
+      // if(data.name === 'anderson') {
+      //   formRef.current.setErrors({
+      //     name: 'O nome Anderson não pode...'
+      //   })
+      //   return;
+      // }
+
       handleValueData(data)
     } catch (err) {
       const validationErrors = {};
@@ -56,7 +63,7 @@ export default function FormRegister({ handleValueData, initialData, validateAga
     }
   }, [validateAgain])
 
-  const handleSetValueInUserInfo = useCallback(_(event => {
+  const handleEvent = useCallback(_(event => {
     setUserInfo(prevState => ({ 
       ...prevState, 
       [event.target.name]: event.target.value 
@@ -75,7 +82,7 @@ export default function FormRegister({ handleValueData, initialData, validateAga
               <Input 
                 placeholder="Name" 
                 name="name" 
-                onChange={event => handleSetValueInUserInfo(event)} 
+                onChange={event => handleEvent(event)} 
               />
             </FormItemContainer>
 
@@ -85,7 +92,7 @@ export default function FormRegister({ handleValueData, initialData, validateAga
                 placeholder="Email" 
                 name="email" 
                 type="email" 
-                onChange={event => handleSetValueInUserInfo(event)}
+                onChange={event => handleEvent(event)}
               />
             </FormItemContainer>
 
@@ -99,6 +106,20 @@ export default function FormRegister({ handleValueData, initialData, validateAga
 
             <ButtonSubmit type="submit">REGISTER</ButtonSubmit>
           </Form>
+
+          <button 
+            type="button" 
+            onClick={() => formRef.current.setErrors({ name: 'Erro manual no name' })}
+          >
+            CLIQUE PARA SETAR UM ERRO MANUAL 
+          </button>
+
+          <button 
+            type="button" 
+            onClick={() => formRef.current.setErrors({ })}
+          >
+            CLIQUE PARA LIMPAR OS ERROS MANUALMENTE 
+          </button>
         </>
       : <h1>Carregando o unform...</h1>}  
     </Container>

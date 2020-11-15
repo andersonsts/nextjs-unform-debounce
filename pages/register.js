@@ -6,7 +6,9 @@ import FormRegister from '../components/FormRegister';
 import { Loading } from '../styles/components/FormRegister/styles';
 
 export default function Register() {
-  const [dataUser, setDataUser] = useState({ name: '', email: '', techs: '' })
+  const [dataUser, setDataUser]           = useState({ name: '', email: '', techs: '' })
+  const [validateAgain, setValidateAgain] = useState(false);
+
   const handleValueData = useCallback((data) => {
     console.log('data received', data)
   }, [])
@@ -27,8 +29,19 @@ export default function Register() {
 
   return (
     <>
+      <button 
+        type="button" 
+        onClick={() => setValidateAgain(prevState => !prevState)}
+      >
+        VERIFICAR NOVAMENTE...
+      </button>
+
       {dataUser 
-      ? <FormRegister handleValueData={handleValueData} initialData={dataUser} /> 
+      ? <FormRegister 
+          handleValueData={handleValueData} 
+          initialData={dataUser} 
+          validateAgain={validateAgain}
+        /> 
       : <Loading />}
     </>
   )
