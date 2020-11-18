@@ -23,8 +23,15 @@ export default function FormRegister({ handleValueData, initialData, validateAga
     { label: 'RN',      value: 'rn'      }
   ] 
 
+  const verifyAgainFormData = useCallback(_(() => {
+    formRef.current.submitForm()
+    console.log('deu o submit de novoooo')
+  }, 300), [formRef])
+
   useEffect(() => {
-    if(formRef.current) formRef.current.submitForm();
+    if(formRef.current) {
+      verifyAgainFormData();
+    };
   }, [validateAgain, formRef])
   
   const handleSubmit = useCallback(async (data) => {
@@ -69,12 +76,16 @@ export default function FormRegister({ handleValueData, initialData, validateAga
 
       {initialData.techs 
       ? <> 
-          <Form onSubmit={handleSubmit} ref={formRef} initialData={initialData}>
+          <Form 
+            onSubmit={handleSubmit} 
+            ref={formRef} 
+            initialData={initialData}
+          >
             <FormItemContainer>
               <label>Nome</label>
               <Input 
                 placeholder="Name" 
-                name="name" 
+                name="name"
                 onChange={event => handleSetValueInUserInfo(event)} 
               />
             </FormItemContainer>
