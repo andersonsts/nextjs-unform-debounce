@@ -3,6 +3,7 @@ import { Form } from '@unform/web';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import InputMask from 'react-input-mask';
 import Input from '../components/Input';
+import Router from 'next/router';
 
 // BUG DO CPF RESOLVIDO //
 
@@ -15,6 +16,14 @@ export default function CPF() {
     uf  : ''
   });
   const [other, setOtherValue] = useState('pedr');
+
+  useEffect(() => {
+    const { pathname } = Router
+
+    if(pathname === '/cpf') {
+      Router.push('/')
+    }
+  }, [])
 
   useEffect(() => {
     if(other === 'pedro') {
